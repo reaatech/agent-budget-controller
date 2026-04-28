@@ -45,7 +45,7 @@
     "@agent-budget-controller/budget-engine": "workspace:*",
     "@agent-budget-controller/spend-tracker": "workspace:*",
     "@agent-budget-controller/pricing": "workspace:*",
-    "commander": "^13.1.0"
+    "commander": "^14.0.3"
   },
   "devDependencies": {
     "typescript": "^5.7.2",
