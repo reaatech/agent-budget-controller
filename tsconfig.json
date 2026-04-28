@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "rootDir": ".",
+    "outDir": "./dist",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [],
+  "references": [
+    { "path": "./packages/types" },
+    { "path": "./packages/pricing" },
+    { "path": "./packages/spend-tracker" },
+    { "path": "./packages/budget-engine" },
+    { "path": "./packages/middleware" },
+    { "path": "./packages/otel-bridge" },
+    { "path": "./packages/llm-router-plugin" },
+    { "path": "./packages/cli" }
+  ],
+  "exclude": ["node_modules", "dist", "build", "coverage"]
+}
