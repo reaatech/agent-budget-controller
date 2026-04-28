@@ -1,0 +1,45 @@
+{
+  "name": "@agent-budget-controller/llm-router-plugin",
+  "version": "0.0.0",
+  "description": "LLM Router integration plugin for agent-budget-controller",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reaatech/agent-budget-controller.git",
+    "directory": "packages/llm-router-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/reaatech/agent-budget-controller/issues"
+  },
+  "homepage": "https://github.com/reaatech/agent-budget-controller#readme",
+  "license": "MIT",
+  "author": "Rick Somers <rick@reaatech.com> (https://reaatech.com)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@agent-budget-controller/types": "workspace:*",
+    "@agent-budget-controller/budget-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
