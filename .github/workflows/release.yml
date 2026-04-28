@@ -30,6 +30,7 @@ jobs:
       - run: pnpm run build
 
       - uses: changesets/action@v1
+        continue-on-error: true
         with:
           publish: pnpm run release
           createGithubReleases: true
