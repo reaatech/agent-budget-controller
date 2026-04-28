@@ -117,9 +117,7 @@ controller.defineBudget({
   policy: {
     softCap: 0.8,
     hardCap: 1.0,
-    autoDowngrade: [
-      { from: ['claude-opus-4-1'], to: 'claude-sonnet-4' },
-    ],
+    autoDowngrade: [{ from: ['claude-opus-4-1'], to: 'claude-sonnet-4' }],
     disableTools: ['web-search', 'code-exec'],
   },
 });
@@ -147,9 +145,10 @@ if (!result.allowed) {
 
 // Apply downgrade and tool filtering
 const modelId = result.suggestedModel ?? 'claude-opus-4-1';
-const tools = result.disabledTools.length > 0
-  ? ['web-search', 'file-read'].filter((t) => !result.disabledTools.includes(t))
-  : ['web-search', 'file-read'];
+const tools =
+  result.disabledTools.length > 0
+    ? ['web-search', 'file-read'].filter((t) => !result.disabledTools.includes(t))
+    : ['web-search', 'file-read'];
 
 // 5. Record actual spend after the LLM call
 controller.record({
@@ -173,12 +172,12 @@ controller.record({
 
 Budgets are isolated by scope — a combination of a dimension type and a unique key:
 
-| Scope       | Description                  | Example Key     |
-| ----------- | ---------------------------- | --------------- |
-| `task`      | Budget per individual task   | `"task-456"`    |
-| `user`      | Budget per end-user          | `"user-123"`    |
-| `session`   | Budget per conversation      | `"sess-abc"`    |
-| `org`       | Budget per organization/team | `"team-alpha"`  |
+| Scope     | Description                  | Example Key    |
+| --------- | ---------------------------- | -------------- |
+| `task`    | Budget per individual task   | `"task-456"`   |
+| `user`    | Budget per end-user          | `"user-123"`   |
+| `session` | Budget per conversation      | `"sess-abc"`   |
+| `org`     | Budget per organization/team | `"team-alpha"` |
 
 Use `scopeKey: '*'` to define a catch-all wildcard budget. Exact matches take priority over wildcards:
 
@@ -204,22 +203,22 @@ controller.defineBudget({
 
 Each budget has a policy that defines how enforcement behaves:
 
-| Policy field      | Type             | Description                                          |
-| ----------------- | ---------------- | ---------------------------------------------------- |
-| `softCap`         | `number` (0–1)   | Ratio at which warnings and downgrades begin         |
-| `hardCap`         | `number` (0–1)   | Ratio at which requests are rejected                 |
-| `autoDowngrade`   | `DowngradeRule[]`| Model swap chains (e.g., Opus → Sonnet → Haiku)      |
-| `disableTools`    | `string[]`       | Tool names to remove when soft cap is reached        |
+| Policy field    | Type              | Description                                     |
+| --------------- | ----------------- | ----------------------------------------------- |
+| `softCap`       | `number` (0–1)    | Ratio at which warnings and downgrades begin    |
+| `hardCap`       | `number` (0–1)    | Ratio at which requests are rejected            |
+| `autoDowngrade` | `DowngradeRule[]` | Model swap chains (e.g., Opus → Sonnet → Haiku) |
+| `disableTools`  | `string[]`        | Tool names to remove when soft cap is reached   |
 
 When a budget check runs, one of these actions is returned:
 
-| Action          | Effect                                                        |
-| --------------- | ------------------------------------------------------------- |
-| `allow`         | Request proceeds normally                                     |
-| `warn`          | Request proceeds, warning event emitted                       |
-| `degrade`       | Model swapped to a cheaper alternative                        |
-| `disable-tools` | Expensive tools removed from the request                      |
-| `hard-stop`     | Request rejected entirely                                     |
+| Action          | Effect                                   |
+| --------------- | ---------------------------------------- |
+| `allow`         | Request proceeds normally                |
+| `warn`          | Request proceeds, warning event emitted  |
+| `degrade`       | Model swapped to a cheaper alternative   |
+| `disable-tools` | Expensive tools removed from the request |
+| `hard-stop`     | Request rejected entirely                |
 
 ### State Machine
 
@@ -237,11 +236,11 @@ Reset a budget back to `active` manually via `controller.reset(BudgetScope.User,
 
 ## Packages
 
-| Package                                      | Description                                             | Dependencies         |
-| -------------------------------------------- | ------------------------------------------------------- | -------------------- |
-| `@agent-budget-controller/types`             | Domain types, enums, and Zod schemas                    | `zod`                |
-| `@agent-budget-controller/pricing`           | LLM pricing tables with LRU cache and file overrides    | `types`              |
-| `@agent-budget-controller/spend-tracker`     | In-memory spend store with multi-index and spike detect | `types`              |
+| Package                                      | Description                                             | Dependencies             |
+| -------------------------------------------- | ------------------------------------------------------- | ------------------------ |
+| `@agent-budget-controller/types`             | Domain types, enums, and Zod schemas                    | `zod`                    |
+| `@agent-budget-controller/pricing`           | LLM pricing tables with LRU cache and file overrides    | `types`                  |
+| `@agent-budget-controller/spend-tracker`     | In-memory spend store with multi-index and spike detect | `types`                  |
 | `@agent-budget-controller/budget-engine`     | Enforcement engine, state machine, and event emitter    | `types`, `spend-tracker` |
 | `@agent-budget-controller/middleware`        | `BudgetInterceptor` SDK wrapper and HTTP utilities      | `types`, `budget-engine` |
 | `@agent-budget-controller/otel-bridge`       | OpenTelemetry GenAI span → spend recording bridge       | `types`, `budget-engine` |
@@ -405,26 +404,26 @@ An external state backend (Redis) is planned for v2 to support shared state acro
 
 ## Performance
 
-| Operation                     | Complexity | Target (p99) |
-| ----------------------------- | ---------- | ------------ |
-| Per-scope spend lookup        | O(1)       | < 1ms        |
-| Budget check (`check()`)      | O(1)       | < 1ms        |
-| Spend recording (`record()`)  | O(1)       | < 1ms        |
-| Scope state lookup            | O(1)       | < 1ms        |
-| Spend rate calculation        | O(1)       | < 1ms        |
-| Memory usage (500K entries)   | —          | ~120 MB      |
+| Operation                    | Complexity | Target (p99) |
+| ---------------------------- | ---------- | ------------ |
+| Per-scope spend lookup       | O(1)       | < 1ms        |
+| Budget check (`check()`)     | O(1)       | < 1ms        |
+| Spend recording (`record()`) | O(1)       | < 1ms        |
+| Scope state lookup           | O(1)       | < 1ms        |
+| Spend rate calculation       | O(1)       | < 1ms        |
+| Memory usage (500K entries)  | —          | ~120 MB      |
 
 ---
 
 ## Documentation
 
-| Document                | Description                                          |
-| ----------------------- | ---------------------------------------------------- |
-| [ARCHITECTURE.md]       | System design, data flow, state machines             |
-| [DEV_PLAN.md]           | Development roadmap and phase breakdown              |
-| [AGENTS.md]             | AI agent skill definitions for automated development |
-| [CONTRIBUTING.md]       | Setup, coding standards, and PR guidelines           |
-| [SECURITY.md]           | Vulnerability reporting and security considerations  |
+| Document          | Description                                          |
+| ----------------- | ---------------------------------------------------- |
+| [ARCHITECTURE.md] | System design, data flow, state machines             |
+| [DEV_PLAN.md]     | Development roadmap and phase breakdown              |
+| [AGENTS.md]       | AI agent skill definitions for automated development |
+| [CONTRIBUTING.md] | Setup, coding standards, and PR guidelines           |
+| [SECURITY.md]     | Vulnerability reporting and security considerations  |
 
 [ARCHITECTURE.md]: ARCHITECTURE.md
 [DEV_PLAN.md]: DEV_PLAN.md

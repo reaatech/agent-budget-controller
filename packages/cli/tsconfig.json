@@ -5,5 +5,11 @@
     "rootDir": "./src"
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "tests"]
+  "exclude": ["dist", "node_modules", "tests"],
+  "references": [
+    { "path": "../types" },
+    { "path": "../budget-engine" },
+    { "path": "../spend-tracker" },
+    { "path": "../pricing" }
+  ]
 }
