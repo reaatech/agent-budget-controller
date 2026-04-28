@@ -1,0 +1,55 @@
+{
+  "name": "@agent-budget-controller/otel-bridge",
+  "version": "0.0.0",
+  "description": "OpenTelemetry cost exporter bridge for agent-budget-controller",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reaatech/agent-budget-controller.git",
+    "directory": "packages/otel-bridge"
+  },
+  "bugs": {
+    "url": "https://github.com/reaatech/agent-budget-controller/issues"
+  },
+  "homepage": "https://github.com/reaatech/agent-budget-controller#readme",
+  "license": "MIT",
+  "author": "Rick Somers <rick@reaatech.com> (https://reaatech.com)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@agent-budget-controller/types": "workspace:*",
+    "@agent-budget-controller/budget-engine": "workspace:*",
+    "@agent-budget-controller/spend-tracker": "workspace:*"
+  },
+  "peerDependencies": {
+    "@opentelemetry/api": ">=1.9.0"
+  },
+  "peerDependenciesMeta": {
+    "@opentelemetry/api": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
