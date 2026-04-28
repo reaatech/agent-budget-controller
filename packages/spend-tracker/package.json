@@ -1,0 +1,44 @@
+{
+  "name": "@agent-budget-controller/spend-tracker",
+  "version": "0.0.0",
+  "description": "Real-time spend tracking for agent-budget-controller",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reaatech/agent-budget-controller.git",
+    "directory": "packages/spend-tracker"
+  },
+  "bugs": {
+    "url": "https://github.com/reaatech/agent-budget-controller/issues"
+  },
+  "homepage": "https://github.com/reaatech/agent-budget-controller#readme",
+  "license": "MIT",
+  "author": "Rick Somers <rick@reaatech.com> (https://reaatech.com)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@agent-budget-controller/types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
