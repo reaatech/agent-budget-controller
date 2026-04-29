@@ -43,6 +43,12 @@ jobs:
       - name: Test with coverage
         run: pnpm run test:coverage
 
+      - name: Merge coverage
+        if: always()
+        run: |
+          mkdir -p coverage
+          find packages -path '*/coverage/coverage-final.json' -exec cp {} coverage/ \;
+
       - name: Upload coverage
         uses: actions/upload-artifact@v7
         if: always()

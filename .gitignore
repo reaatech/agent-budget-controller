@@ -42,10 +42,14 @@ temp/
 # Project-specific (tracked separately)
 DEV_PLAN.md
 
-# Changeset
-.changeset/*.md
-!.changeset/config.json
-!.changeset/README.md
+# Changeset CHANGELOG files (auto-generated)
+**/CHANGELOG.md
 
 # Turbo
 .turbo/
+
+# Stray tsup output in src/ (misconfigured builds)
+packages/*/src/**/*.js
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.d.ts.map
