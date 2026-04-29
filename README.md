@@ -4,9 +4,9 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node.js >= 22](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
-[![pnpm >= 9](https://img.shields.io/badge/pnpm-%3E%3D9-orange.svg)](https://pnpm.io/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
-[![ESM only](https://img.shields.io/badge/ESM-only-ff69b4.svg)](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+[![pnpm >= 10](https://img.shields.io/badge/pnpm-%3E%3D10-orange.svg)](https://pnpm.io/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
+[![ESM + CJS](https://img.shields.io/badge/ESM+ CJS-ff69b4.svg)](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
 
 ---
 
@@ -63,6 +63,7 @@ The **Agent Budget Controller** provides:
 - **LLM Router plugin** — budget-aware routing strategy with model filtering
 - **OpenTelemetry bridge** — consume GenAI spans and record costs automatically
 - **CLI tool** — check budgets, generate reports, validate configs from the command line
+- **Dual ESM/CJS** — published as both ES modules and CommonJS for maximum compatibility
 - **Zero external dependencies** (runtime) — only `zod` for schema validation
 
 ---
@@ -72,9 +73,9 @@ The **Agent Budget Controller** provides:
 | Requirement | Minimum |
 | ----------- | ------- |
 | Node.js     | 22.0.0  |
-| pnpm        | 9.0.0   |
+| pnpm        | 10.0.0  |
 
-The project is **ESM only** — CJS `require()` is not supported.
+The project publishes dual ESM/CJS. Both `import` and `require()` are supported.
 
 ---
 
@@ -84,16 +85,16 @@ The project is organized as a pnpm monorepo. Install individual packages as need
 
 ```bash
 # Core packages (most users need these three)
-pnpm add @agent-budget-controller/budget-engine
-pnpm add @agent-budget-controller/spend-tracker
-pnpm add @agent-budget-controller/types
+pnpm add @reaatech/agent-budget-engine
+pnpm add @reaatech/agent-budget-spend-tracker
+pnpm add @reaatech/agent-budget-types
 
 # Optional packages
-pnpm add @agent-budget-controller/pricing          # Built-in pricing tables
-pnpm add @agent-budget-controller/middleware       # SDK interceptor & HTTP utils
-pnpm add @agent-budget-controller/otel-bridge      # OpenTelemetry integration
-pnpm add @agent-budget-controller/llm-router-plugin # LLM Router strategy
-pnpm add @agent-budget-controller/cli              # Command-line interface
+pnpm add @reaatech/agent-budget-pricing          # Built-in pricing tables
+pnpm add @reaatech/agent-budget-middleware       # SDK interceptor & HTTP utils
+pnpm add @reaatech/agent-budget-otel-bridge      # OpenTelemetry integration
+pnpm add @reaatech/agent-budget-llm-router-plugin # LLM Router strategy
+pnpm add @reaatech/agent-budget-cli              # Command-line interface
 ```
 
 ---
@@ -101,9 +102,9 @@ pnpm add @agent-budget-controller/cli              # Command-line interface
 ## Quick Start
 
 ```typescript
-import { BudgetController } from '@agent-budget-controller/budget-engine';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
-import { BudgetScope, BudgetExceededError } from '@agent-budget-controller/types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
+import { BudgetScope, BudgetExceededError } from '@reaatech/agent-budget-types';
 
 // 1. Create the spend tracker and controller
 const spendTracker = new SpendStore({ maxEntries: 500_000 });
@@ -236,16 +237,16 @@ Reset a budget back to `active` manually via `controller.reset(BudgetScope.User,
 
 ## Packages
 
-| Package                                      | Description                                             | Dependencies             |
-| -------------------------------------------- | ------------------------------------------------------- | ------------------------ |
-| `@agent-budget-controller/types`             | Domain types, enums, and Zod schemas                    | `zod`                    |
-| `@agent-budget-controller/pricing`           | LLM pricing tables with LRU cache and file overrides    | `types`                  |
-| `@agent-budget-controller/spend-tracker`     | In-memory spend store with multi-index and spike detect | `types`                  |
-| `@agent-budget-controller/budget-engine`     | Enforcement engine, state machine, and event emitter    | `types`, `spend-tracker` |
-| `@agent-budget-controller/middleware`        | `BudgetInterceptor` SDK wrapper and HTTP utilities      | `types`, `budget-engine` |
-| `@agent-budget-controller/otel-bridge`       | OpenTelemetry GenAI span → spend recording bridge       | `types`, `budget-engine` |
-| `@agent-budget-controller/llm-router-plugin` | Budget-aware routing strategy for LLM Router            | `types`, `budget-engine` |
-| `@agent-budget-controller/cli`               | CLI for check, list, report, set, reset, validate       | `types`, `budget-engine` |
+| Package                                        | Description                                             | Dependencies             |
+| ---------------------------------------------- | ------------------------------------------------------- | ------------------------ |
+| `@reaatech/agent-budget-types`                 | Domain types, enums, and Zod schemas                    | `zod`                    |
+| `@reaatech/agent-budget-pricing`               | LLM pricing tables with LRU cache and file overrides    | `types`                  |
+| `@reaatech/agent-budget-spend-tracker`         | In-memory spend store with multi-index and spike detect | `types`                  |
+| `@reaatech/agent-budget-engine`                | Enforcement engine, state machine, and event emitter    | `types`, `spend-tracker` |
+| `@reaatech/agent-budget-middleware`            | `BudgetInterceptor` SDK wrapper and HTTP utilities      | `types`, `engine`        |
+| `@reaatech/agent-budget-otel-bridge`           | OpenTelemetry GenAI span → spend recording bridge       | `types`, `engine`        |
+| `@reaatech/agent-budget-llm-router-plugin`     | Budget-aware routing strategy for LLM Router            | `types`, `engine`        |
+| `@reaatech/agent-budget-cli`                   | CLI for check, list, report, set, reset, validate       | `types`, `engine`        |
 
 ---
 
@@ -256,8 +257,8 @@ Reset a budget back to `active` manually via `controller.reset(BudgetScope.User,
 Wrap your agent loop with `BudgetInterceptor` for a minimal integration with zero HTTP overhead:
 
 ```typescript
-import { BudgetInterceptor } from '@agent-budget-controller/middleware';
-import { BudgetScope } from '@agent-budget-controller/types';
+import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
+import { BudgetScope } from '@reaatech/agent-budget-types';
 
 const interceptor = new BudgetInterceptor({ controller });
 
@@ -291,8 +292,8 @@ interceptor.afterStep({
 Register the budget-aware strategy at priority 1 to filter models before routing:
 
 ```typescript
-import { BudgetAwareStrategy } from '@agent-budget-controller/llm-router-plugin';
-import { BudgetScope } from '@agent-budget-controller/types';
+import { BudgetAwareStrategy } from '@reaatech/agent-budget-llm-router-plugin';
+import { BudgetScope } from '@reaatech/agent-budget-types';
 
 const strategy = new BudgetAwareStrategy({
   controller,
@@ -312,7 +313,7 @@ const strategy = new BudgetAwareStrategy({
 If you already have OpenTelemetry GenAI instrumentation, bridge span attributes into the budget system:
 
 ```typescript
-import { SpanListener } from '@agent-budget-controller/otel-bridge';
+import { SpanListener } from '@reaatech/agent-budget-otel-bridge';
 
 const listener = new SpanListener({ controller });
 
@@ -453,11 +454,11 @@ Contributions are welcome. See [CONTRIBUTING.md] for setup instructions, coding 
 Before submitting a PR, ensure:
 
 ```bash
-pnpm run build       # TypeScript compilation
-pnpm run test        # All tests pass
-pnpm run lint        # ESLint passes
-pnpm run typecheck   # Strict type checking
-pnpm run format      # Prettier formatting
+pnpm build       # TypeScript compilation (dual ESM + CJS)
+pnpm test        # All tests pass
+pnpm lint        # Biome check passes
+pnpm typecheck   # Strict type checking
+pnpm format      # Biome formatting
 ```
 
 ---

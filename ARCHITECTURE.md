@@ -26,7 +26,7 @@ The Agent Budget Controller is a real-time cost enforcement layer for LLM agent 
 
 ## Packages
 
-### `@agent-budget-controller/types`
+### `@reaatech/agent-budget-types`
 
 Core domain types and Zod schemas. No external dependencies beyond Zod.
 
@@ -44,7 +44,7 @@ Core domain types and Zod schemas. No external dependencies beyond Zod.
 - `ToolCostConfig` — `{ toolName: string; costWeight: number }` — expensive tools cost more against budget
 - `BudgetError` / `BudgetExceededError` / `BudgetValidationError` — structured error types for all packages
 
-### `@agent-budget-controller/pricing`
+### `@reaatech/agent-budget-pricing`
 
 Pricing table management. Loads default pricing tables for major providers and supports file-based overrides.
 
@@ -61,7 +61,7 @@ Pricing table management. Loads default pricing tables for major providers and s
 - Google (Gemini Pro, Flash)
 - AWS Bedrock (Claude, Llama, Mistral via Bedrock)
 
-### `@agent-budget-controller/spend-tracker`
+### `@reaatech/agent-budget-spend-tracker`
 
 Real-time spend tracking with sub-millisecond lookups. Uses in-memory storage with sliding windows.
 
@@ -101,7 +101,7 @@ SpendStore
 └── byModel             // Map<modelId, Set<entryId>>
 ```
 
-### `@agent-budget-controller/budget-engine`
+### `@reaatech/agent-budget-engine`
 
 The core enforcement engine. Evaluates budgets, applies policies, and emits enforcement decisions.
 
@@ -203,15 +203,15 @@ controller.on('hard-stop', (event) => {
 });
 ```
 
-### `@agent-budget-controller/middleware`
+### `@reaatech/agent-budget-middleware`
 
 HTTP middleware and SDK wrapper for integrating budget enforcement into agent applications.
 
 **SDK wrapper (for agent loops):**
 
 ```typescript
-import { BudgetInterceptor } from '@agent-budget-controller/middleware';
-import { BudgetScope } from '@agent-budget-controller/types';
+import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
+import { BudgetScope } from '@reaatech/agent-budget-types';
 
 const interceptor = new BudgetInterceptor({ controller });
 
@@ -235,7 +235,7 @@ interceptor.afterStep({
 **HTTP middleware utility (`createBudgetMiddleware`):**
 
 ```typescript
-import { createBudgetMiddleware } from '@agent-budget-controller/middleware';
+import { createBudgetMiddleware } from '@reaatech/agent-budget-middleware';
 
 const budgetMiddleware = createBudgetMiddleware({ controller });
 
@@ -252,13 +252,13 @@ mw.afterStep({ actualCost: 0.05, inputTokens: 1000, outputTokens: 500, requestId
 
 Full Express/Fastify middleware with response header injection is planned for a future release.
 
-### `@agent-budget-controller/otel-bridge`
+### `@reaatech/agent-budget-otel-bridge`
 
 Bridges OpenTelemetry GenAI spans to budget spend recording. Supports direct
 span attribute ingestion and custom scope extraction.
 
 ```typescript
-import { SpanListener } from '@agent-budget-controller/otel-bridge';
+import { SpanListener } from '@reaatech/agent-budget-otel-bridge';
 
 const listener = new SpanListener({
   controller: budgetController,
@@ -278,12 +278,12 @@ listener.onSpanEnd({
 
 Uses `@opentelemetry/api` as an optional peer dependency for OTel attribute conventions.
 
-### `@agent-budget-controller/llm-router-plugin`
+### `@reaatech/agent-budget-llm-router-plugin`
 
 Integrates with the `llm-router` package as a pluggable routing strategy.
 
 ```typescript
-import { BudgetAwareStrategy } from '@agent-budget-controller/llm-router-plugin';
+import { BudgetAwareStrategy } from '@reaatech/agent-budget-llm-router-plugin';
 
 const strategy = new BudgetAwareStrategy({
   controller: budgetController,
@@ -311,7 +311,7 @@ const result = strategy.select({
 
 The plugin hooks into llm-router's fallback chain execution. When a budget threshold is crossed mid-chain, it truncates the chain to only include models within the downgraded tier.
 
-### `@agent-budget-controller/cli`
+### `@reaatech/agent-budget-cli`
 
 Command-line interface for budget management and diagnostics.
 
@@ -537,10 +537,10 @@ OpenTelemetry metrics emission and structured logging (pino) are planned for a f
 ### Standalone (no otel-cost-exporter, no llm-router)
 
 ```typescript
-import { BudgetController } from '@agent-budget-controller/budget-engine';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
-import { BudgetInterceptor } from '@agent-budget-controller/middleware';
-import { BudgetScope } from '@agent-budget-controller/types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
+import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
+import { BudgetScope } from '@reaatech/agent-budget-types';
 
 const spendTracker = new SpendStore({ maxEntries: 500000 });
 const controller = new BudgetController({ spendTracker });
@@ -572,7 +572,7 @@ interceptor.afterStep({
 ### With otel-cost-exporter
 
 ```typescript
-import { SpanListener } from '@agent-budget-controller/otel-bridge';
+import { SpanListener } from '@reaatech/agent-budget-otel-bridge';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { CostSpanProcessor } from '@otel-cost-exporter/core';
 
@@ -595,7 +595,7 @@ strategies:
 ```
 
 ```typescript
-import { BudgetAwareStrategy } from '@agent-budget-controller/llm-router-plugin';
+import { BudgetAwareStrategy } from '@reaatech/agent-budget-llm-router-plugin';
 
 const strategy = new BudgetAwareStrategy({ controller, defaultScopeType: 'user' });
 // Register strategy in your llm-router at priority 1

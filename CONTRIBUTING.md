@@ -13,7 +13,7 @@ Thank you for contributing to `agent-budget-controller`! This document provides 
 ### Prerequisites
 
 - Node.js 22+
-- pnpm 9+
+- pnpm 10+
 - Git
 
 ### Setup
@@ -45,14 +45,14 @@ This is a pnpm monorepo with the following packages:
 
 | Package                                      | Description                        |
 | -------------------------------------------- | ---------------------------------- |
-| `@agent-budget-controller/types`             | Core domain types and Zod schemas  |
-| `@agent-budget-controller/pricing`           | LLM pricing table management       |
-| `@agent-budget-controller/spend-tracker`     | Real-time spend tracking           |
-| `@agent-budget-controller/budget-engine`     | Budget enforcement engine          |
-| `@agent-budget-controller/middleware`        | Express/Fastify middleware + SDK   |
-| `@agent-budget-controller/otel-bridge`       | OpenTelemetry cost exporter bridge |
-| `@agent-budget-controller/llm-router-plugin` | LLM Router integration plugin      |
-| `@agent-budget-controller/cli`               | Command-line interface             |
+| `@reaatech/agent-budget-types`             | Core domain types and Zod schemas  |
+| `@reaatech/agent-budget-pricing`           | LLM pricing table management       |
+| `@reaatech/agent-budget-spend-tracker`     | Real-time spend tracking           |
+| `@reaatech/agent-budget-engine`     | Budget enforcement engine          |
+| `@reaatech/agent-budget-middleware`        | Express/Fastify middleware + SDK   |
+| `@reaatech/agent-budget-otel-bridge`       | OpenTelemetry cost exporter bridge |
+| `@reaatech/agent-budget-llm-router-plugin` | LLM Router integration plugin      |
+| `@reaatech/agent-budget-cli`               | Command-line interface             |
 
 ### Development Workflow
 
@@ -117,8 +117,7 @@ Include:
 
 ### Code Style
 
-- Prettier for formatting (run `pnpm run format` before committing)
-- ESLint for code quality
+- Biome for formatting and linting (run `pnpm lint` before committing)
 - 2-space indentation
 - Single quotes
 - Semicolons required

@@ -26,7 +26,7 @@ agent invoke project-setup:init --name agent-budget-controller
 - `package.json` (root, with workspaces)
 - `pnpm-workspace.yaml`
 - `tsconfig.json` (root, with path aliases)
-- `packages/types/`, `packages/pricing/`, `packages/spend-tracker/`, `packages/budget-engine/`, `packages/middleware/`, `packages/otel-bridge/`, `packages/llm-router-plugin/`, `packages/cli/`
+- `packages/types/`, `packages/pricing/`, `packages/spend-tracker/`, `packages/engine/`, `packages/middleware/`, `packages/otel-bridge/`, `packages/llm-router-plugin/`, `packages/cli/`
 - Each package gets its own `package.json`, `tsconfig.json`, `src/index.ts`, `tests/`
 
 ---

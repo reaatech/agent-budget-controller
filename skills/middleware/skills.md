@@ -210,7 +210,7 @@ agent invoke middleware:add-error-handling
 
 **Creates:**
 
-- Re-exports `BudgetExceededError` from `@agent-budget-controller/types`
+- Re-exports `BudgetExceededError` from `@reaatech/agent-budget-types`
 - Express/Fastify error handler integration
 - Returns 429 (Too Many Requests) with JSON body for budget errors
 - Adds `BudgetValidationError` handling for malformed requests

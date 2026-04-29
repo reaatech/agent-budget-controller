@@ -242,7 +242,7 @@ agent invoke budget-engine:add-wildcard-budgets
 - `types-development:define-downgrade-rules`
 - `spend-tracker:create-store`
 - `pricing-engine:build-lookup-engine`
-- `project-setup:add-package` (must create `packages/budget-engine/` first)
+- `project-setup:add-package` (must create `packages/engine/` first)
 
 ## Tests
 
