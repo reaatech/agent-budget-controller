@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { BudgetInterceptor, createBudgetMiddleware } from '../../src/index.js';
 import { BudgetController } from '@reaatech/agent-budget-engine';
 import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import {
-  BudgetScope,
   BudgetExceededError,
+  BudgetScope,
   BudgetValidationError,
 } from '@reaatech/agent-budget-types';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { BudgetInterceptor, createBudgetMiddleware } from '../../src/index.js';
 
 describe('BudgetInterceptor', () => {
   let controller: BudgetController;
@@ -121,7 +121,7 @@ describe('BudgetInterceptor', () => {
       requestId: 'req-after',
     });
     const state = controller.getState(BudgetScope.User, 'user-123');
-    expect(state!.spent).toBe(1.5);
+    expect(state?.spent).toBe(1.5);
   });
 });
 
@@ -208,7 +208,7 @@ describe('createBudgetMiddleware', () => {
     });
 
     const state = controller.getState(BudgetScope.User, 'user-789');
-    expect(state!.spent).toBe(9.7);
+    expect(state?.spent).toBe(9.7);
   });
 
   it('throws on invalid scope type in headers', () => {

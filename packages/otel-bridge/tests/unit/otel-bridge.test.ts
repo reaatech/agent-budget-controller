@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { SpanListener } from '../../src/index.js';
 import { BudgetController } from '@reaatech/agent-budget-engine';
 import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import { BudgetScope } from '@reaatech/agent-budget-types';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { SpanListener } from '../../src/index.js';
 
 describe('SpanListener', () => {
   let controller: BudgetController;
@@ -33,7 +33,7 @@ describe('SpanListener', () => {
       },
       { requestId: 'span-1' },
     );
-    expect(controller.getState(BudgetScope.User, 'user-123')!.spent).toBe(2.5);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.spent).toBe(2.5);
   });
 
   it('computes cost from input + output when total missing', () => {
@@ -46,12 +46,12 @@ describe('SpanListener', () => {
       },
       { requestId: 'span-2' },
     );
-    expect(controller.getState(BudgetScope.User, 'user-123')!.spent).toBe(3.0);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.spent).toBe(3.0);
   });
 
   it('skips when scope extraction fails', () => {
     listener.onSpanEnd({ 'llm.cost.total_usd': 5.0 });
-    expect(controller.getState(BudgetScope.User, 'user-123')!.spent).toBe(0);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.spent).toBe(0);
   });
 
   it('uses custom scope extractor', () => {
@@ -66,7 +66,7 @@ describe('SpanListener', () => {
       policy: { softCap: 0.8, hardCap: 1.0, autoDowngrade: [], disableTools: [] },
     });
     customListener.onSpanEnd({ 'llm.cost.total_usd': 10.0 });
-    expect(controller.getState(BudgetScope.Org, 'acme')!.spent).toBe(10.0);
+    expect(controller.getState(BudgetScope.Org, 'acme')?.spent).toBe(10.0);
   });
 
   it('skips spans with invalid budget scope type', () => {
@@ -75,7 +75,7 @@ describe('SpanListener', () => {
       'budget.scope_key': 'user-123',
       'llm.cost.total_usd': 5.0,
     });
-    expect(controller.getState(BudgetScope.User, 'user-123')!.spent).toBe(0);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.spent).toBe(0);
   });
 
   it('records zero cost when no cost attributes present', () => {
@@ -85,6 +85,6 @@ describe('SpanListener', () => {
       'gen_ai.usage.input_tokens': 100,
       'gen_ai.usage.output_tokens': 50,
     });
-    expect(controller.getState(BudgetScope.User, 'user-123')!.spent).toBe(0);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.spent).toBe(0);
   });
 });

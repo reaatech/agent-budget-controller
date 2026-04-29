@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { PricingEngine, ModelNormalizer } from '../../src/index.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { ModelNormalizer, PricingEngine } from '../../src/index.js';
 
 describe('ModelNormalizer', () => {
   it('normalizes known aliases', () => {

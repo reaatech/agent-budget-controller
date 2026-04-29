@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach } from 'vitest';
 import { BudgetController } from '@reaatech/agent-budget-engine';
+import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import {
+  BudgetExceededError,
   BudgetScope,
   BudgetStateEnum,
-  BudgetExceededError,
   type SpendEntry,
 } from '@reaatech/agent-budget-types';
-import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
-import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('Full Integration Flow', () => {
   let spendTracker: SpendStore;
@@ -114,9 +114,10 @@ describe('Full Integration Flow', () => {
       }),
     ).toThrow(BudgetExceededError);
 
-    const finalState = controller.getState(BudgetScope.User, 'agent-1')!;
-    expect(finalState.state).toBe(BudgetStateEnum.Stopped);
-    expect(finalState.spent).toBeGreaterThan(4.0);
+    const state = controller.getState(BudgetScope.User, 'agent-1');
+    if (!state) throw new Error('Expected finalState to exist');
+    expect(state.state).toBe(BudgetStateEnum.Stopped);
+    expect(state.spent).toBeGreaterThan(4.0);
   });
 
   it('supports multi-scope isolation', () => {
@@ -147,8 +148,9 @@ describe('Full Integration Flow', () => {
 
     controller.record(spend);
 
-    const stateA = controller.getState(BudgetScope.User, 'user-a')!;
-    const stateB = controller.getState(BudgetScope.User, 'user-b')!;
+    const stateA = controller.getState(BudgetScope.User, 'user-a');
+    const stateB = controller.getState(BudgetScope.User, 'user-b');
+    if (!stateA || !stateB) throw new Error('Expected states to exist');
 
     expect(stateA.spent).toBe(7);
     expect(stateB.spent).toBe(0);
