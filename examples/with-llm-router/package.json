@@ -1,0 +1,8 @@
+{
+  "name": "agent-budget-controller-example-llm-router",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Example integrating agent-budget-controller with llm-router",
+  "license": "MIT",
+  "type": "module"
+}
