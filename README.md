@@ -6,7 +6,7 @@
 [![Node.js >= 22](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![pnpm >= 10](https://img.shields.io/badge/pnpm-%3E%3D10-orange.svg)](https://pnpm.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
-[![ESM + CJS](https://img.shields.io/badge/ESM+ CJS-ff69b4.svg)](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+[![ESM + CJS](https://img.shields.io/badge/ESM%2BCJS-ff69b4.svg)]()
 
 ---
 
