@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { ScopeIdentifier, ScopeIdentifierSchema } from './budget-scope.js';
+import type { ScopeIdentifier } from './budget-scope.js';
+import { ScopeIdentifierSchema } from './budget-scope.js';
 
 export enum EnforcementAction {
   Allow = 'allow',

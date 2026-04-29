@@ -1,4 +1,4 @@
-import { BudgetState, BudgetSnapshot } from '@reaatech/agent-budget-types';
+import type { BudgetSnapshot, BudgetState } from '@reaatech/agent-budget-types';
 
 export function formatBudgetState(
   state: BudgetState | undefined,

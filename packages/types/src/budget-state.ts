@@ -1,7 +1,8 @@
 import { z } from 'zod';
-import { BudgetScope, BudgetScopeSchema } from './budget-scope.js';
-import { BudgetStateEnum, BudgetStateEnumSchema } from './enforcement.js';
-import { BudgetPolicy, BudgetPolicySchema } from './budget-policy.js';
+import type { BudgetPolicy } from './budget-policy.js';
+import { BudgetPolicySchema } from './budget-policy.js';
+import { type BudgetScope, BudgetScopeSchema } from './budget-scope.js';
+import { type BudgetStateEnum, BudgetStateEnumSchema } from './enforcement.js';
 
 export interface BudgetState {
   scopeType: BudgetScope;

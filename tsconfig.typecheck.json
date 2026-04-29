@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@reaatech/agent-budget-types": ["./packages/types/src/index.ts"],
+      "@reaatech/agent-budget-pricing": ["./packages/pricing/src/index.ts"],
+      "@reaatech/agent-budget-spend-tracker": ["./packages/spend-tracker/src/index.ts"],
+      "@reaatech/agent-budget-engine": ["./packages/engine/src/index.ts"],
+      "@reaatech/agent-budget-middleware": ["./packages/middleware/src/index.ts"],
+      "@reaatech/agent-budget-otel-bridge": ["./packages/otel-bridge/src/index.ts"],
+      "@reaatech/agent-budget-llm-router-plugin": ["./packages/llm-router-plugin/src/index.ts"],
+      "@reaatech/agent-budget-cli": ["./packages/cli/src/index.ts"]
+    }
+  }
+}

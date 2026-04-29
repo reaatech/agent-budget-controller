@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BudgetScope, BudgetScopeSchema } from './budget-scope.js';
+import { type BudgetScope, BudgetScopeSchema } from './budget-scope.js';
 
 export interface SpendEntry {
   requestId: string;

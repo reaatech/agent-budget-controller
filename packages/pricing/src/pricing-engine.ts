@@ -1,9 +1,9 @@
+import { BudgetError, BudgetErrorCode } from '@reaatech/agent-budget-types';
 import { ModelNormalizer } from './model-normalizer.js';
 import { anthropicPricing } from './tables/anthropic.js';
-import { openaiPricing } from './tables/openai.js';
-import { googlePricing } from './tables/google.js';
 import { awsBedrockPricing } from './tables/aws-bedrock.js';
-import { BudgetError, BudgetErrorCode } from '@reaatech/agent-budget-types';
+import { googlePricing } from './tables/google.js';
+import { openaiPricing } from './tables/openai.js';
 
 export interface PriceEntry {
   inputPricePerMillion: number;

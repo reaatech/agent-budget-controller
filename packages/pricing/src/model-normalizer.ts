@@ -17,13 +17,13 @@ export class ModelNormalizer {
     if (!this.aliases.has(provider)) {
       this.aliases.set(provider, new Map());
     }
-    this.aliases.get(provider)!.set(alias.toLowerCase(), canonical);
+    this.aliases.get(provider)?.set(alias.toLowerCase(), canonical);
   }
 
   normalize(modelId: string, provider?: string): string {
     const lower = modelId.toLowerCase();
     if (provider && this.aliases.has(provider)) {
-      const canonical = this.aliases.get(provider)!.get(lower);
+      const canonical = this.aliases.get(provider)?.get(lower);
       if (canonical) return canonical;
     }
     // Try all providers if no provider specified

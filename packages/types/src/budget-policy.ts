@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { BudgetScope, BudgetScopeSchema } from './budget-scope.js';
-import { DowngradeRule, DowngradeRuleSchema } from './downgrade-rule.js';
+import { type BudgetScope, BudgetScopeSchema } from './budget-scope.js';
+import type { DowngradeRule } from './downgrade-rule.js';
+import { DowngradeRuleSchema } from './downgrade-rule.js';
 
 export interface BudgetPolicy {
   softCap: number;

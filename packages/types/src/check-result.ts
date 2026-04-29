@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { BudgetScope, BudgetScopeSchema } from './budget-scope.js';
-import { EnforcementAction, EnforcementActionSchema } from './enforcement.js';
+import { type BudgetScope, BudgetScopeSchema } from './budget-scope.js';
+import { type EnforcementAction, EnforcementActionSchema } from './enforcement.js';
 
 export interface BudgetCheckRequest {
   scopeType: BudgetScope;
