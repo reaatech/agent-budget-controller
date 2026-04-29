@@ -2,44 +2,44 @@
   "name": "@reaatech/agent-budget-pricing",
   "version": "0.1.0",
   "description": "LLM pricing table management for agent-budget-controller",
+  "license": "MIT",
+  "author": "Rick Somers <rick@reaatech.com> (https://reaatech.com)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reaatech/agent-budget-controller.git",
     "directory": "packages/pricing"
   },
+  "homepage": "https://github.com/reaatech/agent-budget-controller#readme",
   "bugs": {
     "url": "https://github.com/reaatech/agent-budget-controller/issues"
   },
-  "homepage": "https://github.com/reaatech/agent-budget-controller#readme",
-  "license": "MIT",
-  "author": "Rick Somers <rick@reaatech.com> (https://reaatech.com)",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "clean": "rm -rf dist"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@reaatech/agent-budget-types": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.4.0",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
   }
 }
