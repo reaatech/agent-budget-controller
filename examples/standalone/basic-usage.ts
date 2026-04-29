@@ -1,7 +1,7 @@
-import { BudgetController } from '@agent-budget-controller/budget-engine';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
-import { BudgetInterceptor } from '@agent-budget-controller/middleware';
-import { BudgetScope, BudgetExceededError } from '@agent-budget-controller/types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
+import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
+import { BudgetExceededError, BudgetScope } from '@reaatech/agent-budget-types';
 
 const spendTracker = new SpendStore({ maxEntries: 500_000 });
 const controller = new BudgetController({ spendTracker });
@@ -95,8 +95,8 @@ async function agentLoop(iterations: number): Promise<void> {
 
       const state = controller.getState(BudgetScope.User, 'user-123');
       console.log(
-        `  spent=$${state!.spent.toFixed(4)} remaining=$${state!.remaining.toFixed(4)} ` +
-          `state=${state!.state}`,
+        `  spent=$${state?.spent.toFixed(4)} remaining=$${state?.remaining.toFixed(4)} ` +
+          `state=${state?.state}`,
       );
     } catch (err) {
       if (err instanceof BudgetExceededError) {

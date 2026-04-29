@@ -68,7 +68,6 @@ jobs:
           EOF
           echo "$PUBLISHED_PACKAGES" | jq -r '.[].name' | while read -r name; do
             dir="packages/${name#@reaatech/agent-budget-}"
-            [ -d "$dir" ] || dir="packages/budget-${name#@reaatech/agent-budget-}"
             echo "Mirroring $name -> $dir"
             (cd "$dir" && npm publish --registry=https://npm.pkg.github.com)
           done

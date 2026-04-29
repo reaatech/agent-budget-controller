@@ -1,18 +1,18 @@
+import type { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import {
-  BudgetScope,
-  BudgetState,
-  BudgetStateEnum,
-  BudgetDefinition,
-  BudgetCheckRequest,
-  BudgetCheckResult,
-  SpendEntry,
-  EnforcementAction,
-  BudgetErrorCode,
+  type BudgetCheckRequest,
+  type BudgetCheckResult,
+  type BudgetDefinition,
   BudgetError,
+  BudgetErrorCode,
+  BudgetScope,
+  type BudgetState,
+  BudgetStateEnum,
+  EnforcementAction,
+  type SpendEntry,
 } from '@reaatech/agent-budget-types';
-import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
-import { PolicyEvaluator } from './policy-evaluator.js';
 import { DowngradeEngine } from './downgrade-engine.js';
+import { PolicyEvaluator } from './policy-evaluator.js';
 import { ToolFilter } from './tool-filter.js';
 
 export interface PricingProvider {
@@ -285,7 +285,7 @@ export class BudgetController {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
-    this.listeners.get(event)!.add(callback as unknown as (...args: unknown[]) => void);
+    this.listeners.get(event)?.add(callback as unknown as (...args: unknown[]) => void);
   }
 
   off<K extends keyof BudgetEventMap>(

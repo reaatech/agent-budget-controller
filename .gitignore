@@ -42,9 +42,6 @@ temp/
 # Project-specific (tracked separately)
 DEV_PLAN.md
 
-# Changeset CHANGELOG files (auto-generated)
-**/CHANGELOG.md
-
 # Turbo
 .turbo/
 

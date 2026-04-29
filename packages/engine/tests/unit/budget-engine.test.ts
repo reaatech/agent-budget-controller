@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { BudgetController, PolicyEvaluator, DowngradeEngine, ToolFilter } from '../../src/index.js';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import {
+  BudgetError,
   BudgetScope,
   BudgetStateEnum,
   EnforcementAction,
-  BudgetError,
   type SpendEntry,
 } from '@reaatech/agent-budget-types';
-import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { BudgetController, DowngradeEngine, PolicyEvaluator, ToolFilter } from '../../src/index.js';
 
 describe('BudgetController', () => {
   let spendTracker: SpendStore;
@@ -133,19 +133,19 @@ describe('BudgetController', () => {
     defineUserBudget();
     controller.record(spendEntry(3));
     const state = controller.getState(BudgetScope.User, 'user-123');
-    expect(state!.spent).toBe(3);
-    expect(state!.remaining).toBe(7);
+    expect(state?.spent).toBe(3);
+    expect(state?.remaining).toBe(7);
   });
 
   it('transitions state active → warned → degraded → stopped', () => {
     defineUserBudget(10, 0.5);
-    expect(controller.getState(BudgetScope.User, 'user-123')!.state).toBe(BudgetStateEnum.Active);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.state).toBe(BudgetStateEnum.Active);
 
     controller.record(spendEntry(5.1));
-    expect(controller.getState(BudgetScope.User, 'user-123')!.state).toBe(BudgetStateEnum.Warned);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.state).toBe(BudgetStateEnum.Warned);
 
     controller.record(spendEntry(4.9));
-    expect(controller.getState(BudgetScope.User, 'user-123')!.state).toBe(BudgetStateEnum.Stopped);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.state).toBe(BudgetStateEnum.Stopped);
   });
 
   it('emits events on state change', () => {
@@ -178,10 +178,11 @@ describe('BudgetController', () => {
   it('resets budget to active state', () => {
     defineUserBudget();
     controller.record(spendEntry(10));
-    expect(controller.getState(BudgetScope.User, 'user-123')!.state).toBe(BudgetStateEnum.Stopped);
+    expect(controller.getState(BudgetScope.User, 'user-123')?.state).toBe(BudgetStateEnum.Stopped);
 
     controller.reset(BudgetScope.User, 'user-123');
-    const state = controller.getState(BudgetScope.User, 'user-123')!;
+    const state = controller.getState(BudgetScope.User, 'user-123');
+    if (!state) throw new Error('Expected state to exist');
     expect(state.state).toBe(BudgetStateEnum.Active);
     expect(state.spent).toBe(0);
     expect(state.remaining).toBe(10);
@@ -360,7 +361,7 @@ describe('BudgetController', () => {
       },
     });
     controller.record(spendEntry(6, { scopeKey: 'degrade-test' }));
-    expect(controller.getState(BudgetScope.User, 'degrade-test')!.state).toBe(
+    expect(controller.getState(BudgetScope.User, 'degrade-test')?.state).toBe(
       BudgetStateEnum.Degraded,
     );
   });
@@ -412,16 +413,18 @@ describe('BudgetController', () => {
 
   it('getState returns a defensive copy', () => {
     defineUserBudget();
-    const state1 = controller.getState(BudgetScope.User, 'user-123')!;
-    const state2 = controller.getState(BudgetScope.User, 'user-123')!;
+    const state1 = controller.getState(BudgetScope.User, 'user-123');
+    const state2 = controller.getState(BudgetScope.User, 'user-123');
+    if (!state1 || !state2) throw new Error('Expected states to exist');
     state1.spent = 999;
     expect(state2.spent).not.toBe(999);
   });
 
   it('getBudget returns a defensive copy', () => {
     defineUserBudget();
-    const budget1 = controller.getBudget(BudgetScope.User, 'user-123')!;
-    const budget2 = controller.getBudget(BudgetScope.User, 'user-123')!;
+    const budget1 = controller.getBudget(BudgetScope.User, 'user-123');
+    const budget2 = controller.getBudget(BudgetScope.User, 'user-123');
+    if (!budget1 || !budget2) throw new Error('Expected budgets to exist');
     budget1.policy.softCap = 0.1;
     budget1.policy.autoDowngrade[0] = { from: ['x'], to: 'y' };
     expect(budget2.policy.softCap).toBe(0.8);
