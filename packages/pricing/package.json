@@ -1,6 +1,6 @@
 {
-  "name": "@agent-budget-controller/pricing",
-  "version": "0.0.0",
+  "name": "@reaatech/agent-budget-pricing",
+  "version": "0.1.0",
   "description": "LLM pricing table management for agent-budget-controller",
   "repository": {
     "type": "git",
@@ -26,18 +26,19 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b",
-    "typecheck": "tsc --noEmit",
+    "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@agent-budget-controller/types": "workspace:*"
+    "@reaatech/agent-budget-types": "workspace:*"
   },
   "devDependencies": {
+    "tsup": "^8.4.0",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }

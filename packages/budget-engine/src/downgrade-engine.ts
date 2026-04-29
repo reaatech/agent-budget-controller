@@ -1,4 +1,4 @@
-import { DowngradeRule } from '@agent-budget-controller/types';
+import { DowngradeRule } from '@reaatech/agent-budget-types';
 
 export class DowngradeEngine {
   suggestDowngrade(currentModel: string, rules: DowngradeRule[]): string | undefined {

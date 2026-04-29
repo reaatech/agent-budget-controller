@@ -9,8 +9,8 @@ import {
   EnforcementAction,
   BudgetErrorCode,
   BudgetError,
-} from '@agent-budget-controller/types';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
+} from '@reaatech/agent-budget-types';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import { PolicyEvaluator } from './policy-evaluator.js';
 import { DowngradeEngine } from './downgrade-engine.js';
 import { ToolFilter } from './tool-filter.js';

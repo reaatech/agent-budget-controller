@@ -1,6 +1,6 @@
 {
-  "name": "@agent-budget-controller/types",
-  "version": "0.0.0",
+  "name": "@reaatech/agent-budget-types",
+  "version": "0.1.0",
   "description": "Core domain types and Zod schemas for agent-budget-controller",
   "repository": {
     "type": "git",
@@ -26,10 +26,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b",
-    "typecheck": "tsc --noEmit",
+    "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist"
   },
   "publishConfig": {
     "access": "public"
@@ -38,6 +38,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "tsup": "^8.4.0",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }

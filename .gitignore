@@ -46,3 +46,6 @@ DEV_PLAN.md
 .changeset/*.md
 !.changeset/config.json
 !.changeset/README.md
+
+# Turbo
+.turbo/

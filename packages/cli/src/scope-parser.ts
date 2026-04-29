@@ -1,4 +1,4 @@
-import { BudgetScope } from '@agent-budget-controller/types';
+import { BudgetScope } from '@reaatech/agent-budget-types';
 
 export interface ParsedScope {
   scopeType: BudgetScope;

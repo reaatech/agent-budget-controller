@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { SpendStore } from '../../src/index.js';
-import { BudgetScope, type SpendEntry } from '@agent-budget-controller/types';
+import { BudgetScope, type SpendEntry } from '@reaatech/agent-budget-types';
 
 function makeEntry(overrides: Partial<SpendEntry> = {}): SpendEntry {
   return {

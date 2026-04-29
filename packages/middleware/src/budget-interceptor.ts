@@ -3,8 +3,8 @@ import {
   type ScopeIdentifier,
   BudgetExceededError,
   BudgetValidationError,
-} from '@agent-budget-controller/types';
-import { BudgetController } from '@agent-budget-controller/budget-engine';
+} from '@reaatech/agent-budget-types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
 
 export interface InterceptorContext {
   scope: ScopeIdentifier;

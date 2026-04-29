@@ -1,4 +1,4 @@
-import type { BudgetScope, SpendEntry } from '@agent-budget-controller/types';
+import type { BudgetScope, SpendEntry } from '@reaatech/agent-budget-types';
 
 export interface SpendAccumulator {
   total: number;

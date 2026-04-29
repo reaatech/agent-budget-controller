@@ -3,7 +3,7 @@ import { anthropicPricing } from './tables/anthropic.js';
 import { openaiPricing } from './tables/openai.js';
 import { googlePricing } from './tables/google.js';
 import { awsBedrockPricing } from './tables/aws-bedrock.js';
-import { BudgetError, BudgetErrorCode } from '@agent-budget-controller/types';
+import { BudgetError, BudgetErrorCode } from '@reaatech/agent-budget-types';
 
 export interface PriceEntry {
   inputPricePerMillion: number;

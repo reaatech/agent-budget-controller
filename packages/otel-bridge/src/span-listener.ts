@@ -1,5 +1,5 @@
-import { BudgetScope, type SpendEntry } from '@agent-budget-controller/types';
-import { BudgetController } from '@agent-budget-controller/budget-engine';
+import { BudgetScope, type SpendEntry } from '@reaatech/agent-budget-types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
 
 export interface SpanListenerOptions {
   controller: BudgetController;

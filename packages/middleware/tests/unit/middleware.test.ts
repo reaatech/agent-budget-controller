@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { BudgetInterceptor, createBudgetMiddleware } from '../../src/index.js';
-import { BudgetController } from '@agent-budget-controller/budget-engine';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
+import { BudgetController } from '@reaatech/agent-budget-engine';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import {
   BudgetScope,
   BudgetExceededError,
   BudgetValidationError,
-} from '@agent-budget-controller/types';
+} from '@reaatech/agent-budget-types';
 
 describe('BudgetInterceptor', () => {
   let controller: BudgetController;

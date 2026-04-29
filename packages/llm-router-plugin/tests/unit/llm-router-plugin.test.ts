@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { BudgetAwareStrategy } from '../../src/index.js';
-import { BudgetController } from '@agent-budget-controller/budget-engine';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
-import { BudgetScope } from '@agent-budget-controller/types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
+import { BudgetScope } from '@reaatech/agent-budget-types';
 
 describe('BudgetAwareStrategy', () => {
   let controller: BudgetController;

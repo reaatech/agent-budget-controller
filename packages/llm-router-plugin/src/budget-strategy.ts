@@ -1,5 +1,5 @@
-import { BudgetScope } from '@agent-budget-controller/types';
-import { BudgetController } from '@agent-budget-controller/budget-engine';
+import { BudgetScope } from '@reaatech/agent-budget-types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
 
 export interface RoutingModel {
   id: string;

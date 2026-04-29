@@ -1,4 +1,4 @@
-import { ToolFilterResult } from '@agent-budget-controller/types';
+import { ToolFilterResult } from '@reaatech/agent-budget-types';
 
 export class ToolFilter {
   filter(tools: string[], disabledTools: string[]): ToolFilterResult {

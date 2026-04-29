@@ -6,8 +6,8 @@ import {
   EnforcementAction,
   BudgetError,
   type SpendEntry,
-} from '@agent-budget-controller/types';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
+} from '@reaatech/agent-budget-types';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 
 describe('BudgetController', () => {
   let spendTracker: SpendStore;

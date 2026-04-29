@@ -1,6 +1,6 @@
 {
-  "name": "@agent-budget-controller/middleware",
-  "version": "0.0.0",
+  "name": "@reaatech/agent-budget-middleware",
+  "version": "0.1.0",
   "description": "Express/Fastify middleware and SDK wrapper for agent-budget-controller",
   "repository": {
     "type": "git",
@@ -26,20 +26,21 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b",
-    "typecheck": "tsc --noEmit",
+    "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@agent-budget-controller/types": "workspace:*",
-    "@agent-budget-controller/budget-engine": "workspace:*",
-    "@agent-budget-controller/spend-tracker": "workspace:*"
+    "@reaatech/agent-budget-types": "workspace:*",
+    "@reaatech/agent-budget-engine": "workspace:*",
+    "@reaatech/agent-budget-spend-tracker": "workspace:*"
   },
   "devDependencies": {
+    "tsup": "^8.4.0",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }

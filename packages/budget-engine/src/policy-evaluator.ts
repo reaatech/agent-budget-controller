@@ -1,4 +1,4 @@
-import { BudgetPolicy, EnforcementAction } from '@agent-budget-controller/types';
+import { BudgetPolicy, EnforcementAction } from '@reaatech/agent-budget-types';
 
 export interface PolicyEvaluation {
   action: EnforcementAction;

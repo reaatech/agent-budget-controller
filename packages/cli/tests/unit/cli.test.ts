@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseScope, formatBudgetState, formatSnapshotTable } from '../../src/index.js';
-import { BudgetScope, BudgetStateEnum } from '@agent-budget-controller/types';
+import { BudgetScope, BudgetStateEnum } from '@reaatech/agent-budget-types';
 
 describe('parseScope', () => {
   it('parses user scope', () => {

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { readFileSync } from 'node:fs';
-import { BudgetScope } from '@agent-budget-controller/types';
-import { BudgetController } from '@agent-budget-controller/budget-engine';
-import { SpendStore } from '@agent-budget-controller/spend-tracker';
-import { PricingEngine } from '@agent-budget-controller/pricing';
+import { BudgetScope } from '@reaatech/agent-budget-types';
+import { BudgetController } from '@reaatech/agent-budget-engine';
+import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
+import { PricingEngine } from '@reaatech/agent-budget-pricing';
 import { parseScope, formatBudgetState, formatSnapshotTable } from './index.js';
 
 const program = new Command();
