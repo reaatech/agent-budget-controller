@@ -179,4 +179,4 @@ org:acme       100.00 95.00  5.00       warned
 
 ## License
 
-MIT — see [LICENSE](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE).
+[MIT](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE)

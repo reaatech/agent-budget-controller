@@ -104,61 +104,20 @@ interface RoutingResult {
 
 ## Usage Patterns
 
-### Full LLM Router Integration
-
-```typescript
-import { BudgetAwareStrategy } from "@reaatech/agent-budget-llm-router-plugin";
-import { Router } from "llm-router";
-import { BudgetScope } from "@reaatech/agent-budget-types";
-
-const budgetStrategy = new BudgetAwareStrategy({
-  controller,
-  defaultScopeType: BudgetScope.Org,
-});
-
-const router = new Router({
-  strategies: [
-    budgetStrategy,          // priority 1: budget enforcement
-    myLatencyStrategy,        // priority 2: latency-based routing
-    myCostStrategy,           // priority 3: cheapest available
-  ],
-});
-
-const routed = await router.route({
-  models: [
-    { id: "claude-opus-4-1", estimatedCost: 0.15 },
-    { id: "claude-sonnet-4", estimatedCost: 0.05 },
-  ],
-  budget: {
-    scopeType: BudgetScope.User,
-    scopeKey: "user-42",
-  },
-});
-
-if (routed.blocked) {
-  throw new BudgetExceededError({ ... });
-}
-
-// routed.model → cheapest model within budget
-```
-
 ### Per-Request Scope Override
 
 ```typescript
-// Default scope: Org "acme-corp"
 const strategy = new BudgetAwareStrategy({
   controller,
   defaultScopeType: BudgetScope.Org,
   defaultScopeKey: 'acme-corp',
 });
 
-// Override scope per-request
 const result = strategy.select({
   scopeType: BudgetScope.User,
   scopeKey: 'vip-user-7',
   models: [{ id: 'claude-opus-4-1', estimatedCost: 0.15 }],
 });
-// Uses user-7's budget, not acme-corp's
 ```
 
 ### Progressive Degradation
@@ -167,8 +126,59 @@ const result = strategy.select({
 const result = strategy.select({ models: expensiveModels });
 
 if (result.blocked) {
-  // All models exceed budget — fall back to cheapest possible
   result.models = [{ id: 'claude-haiku-3-5', estimatedCost: 0.001 }];
+}
+```
+
+## Integration with LLM Router
+
+```typescript
+import { BudgetAwareStrategy } from '@reaatech/agent-budget-llm-router-plugin';
+import { Router } from 'llm-router';
+import { BudgetScope } from '@reaatech/agent-budget-types';
+
+const budgetStrategy = new BudgetAwareStrategy({
+  controller,
+  defaultScopeType: BudgetScope.Org,
+});
+
+const router = new Router({
+  strategies: [
+    budgetStrategy,
+    myLatencyStrategy,
+    myCostStrategy,
+  ],
+});
+
+const routed = await router.route({
+  models: [
+    { id: 'claude-opus-4-1', estimatedCost: 0.15 },
+    { id: 'claude-sonnet-4', estimatedCost: 0.05 },
+  ],
+  budget: { scopeType: BudgetScope.User, scopeKey: 'user-42' },
+});
+
+if (routed.blocked) {
+  throw new BudgetExceededError({ ... });
+}
+```
+
+## Error Handling
+
+| Error | When |
+|-------|------|
+| `BudgetExceededError` | All models exceed the remaining budget (`blocked: true`) |
+
+```typescript
+const result = strategy.select({ models });
+
+if (result.blocked) {
+  throw new BudgetExceededError({
+    scope: { scopeType: request.scopeType ?? defaultScope, scopeKey: request.scopeKey ?? 'default' },
+    spent: state.spent,
+    limit: state.limit,
+    remaining: state.remaining,
+  });
 }
 ```
 
@@ -181,4 +191,4 @@ if (result.blocked) {
 
 ## License
 
-MIT — see [LICENSE](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE).
+[MIT](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE)

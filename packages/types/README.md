@@ -136,4 +136,4 @@ throw new BudgetExceededError({
 
 ## License
 
-MIT — see [LICENSE](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE).
+[MIT](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE)

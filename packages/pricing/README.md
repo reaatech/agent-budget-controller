@@ -25,7 +25,7 @@ pnpm add @reaatech/agent-budget-pricing
 - **LRU cache with TTL** — configurable cache TTL (default 1 hour) avoids repeated table lookups
 - **Programmatic table loading** — `loadTable(provider, models)` for custom or updated pricing
 - **File-based overrides** — load pricing from JSON files to override or extend built-in tables
-- **ESM-only output** — modern tree-shakeable package
+- **Dual ESM/CJS output** — works with `import` and `require`
 
 ## Quick Start
 
@@ -150,4 +150,4 @@ const result = await controller.check({
 
 ## License
 
-MIT — see [LICENSE](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE).
+[MIT](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE)

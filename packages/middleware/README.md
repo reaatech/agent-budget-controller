@@ -165,45 +165,10 @@ The `afterStep` handler records the actual spend and cleans up context.
 
 ## Usage Patterns
 
-### Progressive Response: Warn Then Block
-
-```typescript
-app.post(
-  '/agent',
-  middleware.beforeStep,
-  (req, res, next) => {
-    const ctx = req.budgetContext;
-
-    if (!ctx.allowed) {
-      const retryAfter = res.get('Retry-After') ?? '3600';
-      return res.status(402).json({
-        error: 'Budget exhausted',
-        budget: {
-          limit: res.get('X-Budget-Limit'),
-          spent: res.get('X-Budget-Spent'),
-          suggestedModel: res.get('X-Budget-Suggested-Model'),
-        },
-      });
-    }
-
-    if (ctx.warning) {
-      res.set('X-Budget-Warning', ctx.warning);
-    }
-
-    next();
-  },
-  middleware.afterStep,
-);
-```
-
 ### Custom Scope Extraction
 
 ```typescript
-import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
-
 const interceptor = new BudgetInterceptor({ controller });
-
-// Scope from JWT claims, not HTTP headers
 const scope = { scopeType: BudgetScope.Org, scopeKey: jwtPayload.orgId };
 
 const ctx = await interceptor.beforeStep({
@@ -211,6 +176,50 @@ const ctx = await interceptor.beforeStep({
   modelId: 'claude-sonnet-4',
   estimatedCost: 0.05,
 });
+```
+
+## Advanced: Progressive Response
+
+```typescript
+app.post('/agent', middleware.beforeStep, (req, res, next) => {
+  const ctx = req.budgetContext;
+
+  if (!ctx.allowed) {
+    return res.status(402).json({
+      error: 'Budget exhausted',
+      budget: {
+        limit: res.get('X-Budget-Limit'),
+        spent: res.get('X-Budget-Spent'),
+        suggestedModel: res.get('X-Budget-Suggested-Model'),
+      },
+    });
+  }
+
+  if (ctx.warning) {
+    res.set('X-Budget-Warning', ctx.warning);
+  }
+
+  next();
+}, middleware.afterStep);
+```
+
+## Error Handling
+
+The interceptor throws typed errors from `@reaatech/agent-budget-types`:
+
+| Error | When |
+|-------|------|
+| `BudgetExceededError` | The request would exceed the hard cap |
+| `BudgetValidationError` | Missing or invalid scope identifiers |
+
+```typescript
+try {
+  const ctx = await interceptor.beforeStep({ ... });
+} catch (err) {
+  if (err instanceof BudgetExceededError) {
+    res.status(402).json({ error: err.message, remaining: err.remaining });
+  }
+}
 ```
 
 ## Related Packages
@@ -224,4 +233,4 @@ const ctx = await interceptor.beforeStep({
 
 ## License
 
-MIT — see [LICENSE](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE).
+[MIT](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE)

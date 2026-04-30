@@ -101,51 +101,28 @@ The listener extracts these standard GenAI OTel attributes:
 
 ## Usage Patterns
 
-### Custom Scope Extraction
-
-```typescript
-const listener = new SpanListener({
-  controller,
-  scopeExtractor: (attributes) => {
-    // Map spans to scopes based on your own attribute conventions
-    const userId = attributes['myapp.user_id'] as string;
-    const orgId = attributes['myapp.org_id'] as string;
-
-    if (userId) {
-      return { scopeType: BudgetScope.User, scopeKey: userId };
-    }
-    if (orgId) {
-      return { scopeType: BudgetScope.Org, scopeKey: orgId };
-    }
-    return null; // skip spans without a known scope
-  },
-});
-```
-
 ### Span Attribute Overrides
 
 ```typescript
-// Override specific attributes per-span (e.g., for cost computed externally)
 listener.onSpanEnd(span.attributes, {
-  cost: 0.15, // override llm.cost.total_usd
-  modelId: 'claude-sonnet-4', // override gen_ai.request.model
+  cost: 0.15,
+  modelId: 'claude-sonnet-4',
 });
 ```
 
-### Full OTel Integration Pipeline
+## Integration with OpenTelemetry SDK
 
 ```typescript
 import { SpanListener } from '@reaatech/agent-budget-otel-bridge';
 import { BudgetController } from '@reaatech/agent-budget-engine';
 import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
-import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
+import { NodeTracerProvider, BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 
 const store = new SpendStore();
 const controller = new BudgetController({ spendTracker: store });
 const listener = new SpanListener({ controller });
 
-// Define budgets...
 await controller.defineBudget({
   scopeType: BudgetScope.User,
   scopeKey: 'user-42',
@@ -161,8 +138,26 @@ provider.addSpanProcessor({
   shutdown: () => Promise.resolve(),
 });
 provider.register();
+```
 
-// All GenAI spans from your agent are now automatically budget-tracked
+## Creating a Custom Scope Extractor
+
+```typescript
+const listener = new SpanListener({
+  controller,
+  scopeExtractor: (attributes) => {
+    const userId = attributes['myapp.user_id'] as string;
+    const orgId = attributes['myapp.org_id'] as string;
+
+    if (userId) {
+      return { scopeType: BudgetScope.User, scopeKey: userId };
+    }
+    if (orgId) {
+      return { scopeType: BudgetScope.Org, scopeKey: orgId };
+    }
+    return null;
+  },
+});
 ```
 
 ## Related Packages
@@ -175,4 +170,4 @@ provider.register();
 
 ## License
 
-MIT — see [LICENSE](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE).
+[MIT](https://github.com/reaatech/agent-budget-controller/blob/main/LICENSE)

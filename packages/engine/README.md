@@ -97,6 +97,8 @@ The central orchestrator. All enforcement flows through this class.
 
 #### Events
 
+All transitions emit typed events:
+
 | Event              | Payload                | Fires When                           |
 | ------------------ | ---------------------- | ------------------------------------ |
 | `state-change`     | `StateChangeEvent`     | Scope transitions between states     |
@@ -108,6 +110,16 @@ The central orchestrator. All enforcement flows through this class.
 controller.on('threshold-breach', (event) => {
   console.warn(`Budget at ${event.threshold * 100}% for ${event.scopeType}:${event.scopeKey}`);
 });
+```
+
+#### State Machine
+
+Valid state transitions are enforced automatically:
+
+```
+Active ──(soft cap reached)──▶ Warned ──(downgrade triggered)──▶ Degraded ──(hard cap reached)──▶ Stopped
+  ▲                                                                                     │
+  └──────────────────────────────(budget reset)──────────────────────────────────────────┘
 ```
 
 #### Constructor
@@ -171,10 +183,9 @@ const result = filter.filter(
 
 ## Usage Patterns
 
-### Wildcard Budgets (Catch-All)
+### Wildcard Budgets
 
 ```typescript
-// Set a default budget for all users not explicitly defined
 await controller.defineBudget({
   scopeType: BudgetScope.User,
   scopeKey: '*',
@@ -182,18 +193,32 @@ await controller.defineBudget({
   policy: { softCap: 0.8, hardCap: 1.0 },
 });
 
-// Explicit budget overrides the wildcard
 await controller.defineBudget({
   scopeType: BudgetScope.User,
   scopeKey: 'power-user-99',
   limit: 50.0,
   policy: { softCap: 0.8, hardCap: 1.0 },
 });
-
-// power-user-99 gets $50 limit; everyone else gets $5
 ```
 
-### Multi-Scope with Event-Driven Alerting
+## Advanced: Auto-Downgrade Flow
+
+```typescript
+const check = await controller.check({
+  scopeType: BudgetScope.User,
+  scopeKey: 'user-42',
+  estimatedCost: 0.15,
+  modelId: 'claude-opus-4-1',
+  tools: ['web-search'],
+});
+
+const actualModel = check.suggestedModel ?? 'claude-opus-4-1';
+const actualTools = check.disabledTools
+  ? check.tools.filter((t) => !check.disabledTools.includes(t))
+  : check.tools;
+```
+
+## Advanced: Event-Driven Alerting
 
 ```typescript
 controller.on('hard-stop', (event) => {
@@ -211,25 +236,27 @@ controller.on('threshold-breach', (event) => {
 });
 ```
 
-### Automatic Model Downgrade Flow
+## Error Handling
+
+The controller throws typed errors from `@reaatech/agent-budget-types`:
+
+| Error | When |
+|-------|------|
+| `BudgetExceededError` | A check or record exceeds the hard cap |
+| `BudgetValidationError` | Invalid budget definition or scope |
+
+Check results before recording:
 
 ```typescript
-const check = await controller.check({
-  scopeType: BudgetScope.User,
-  scopeKey: 'user-42',
-  estimatedCost: 0.15,
-  modelId: 'claude-opus-4-1',
-  tools: ['web-search'],
-});
-
-if (!check.allowed) throw new BudgetExceededError(check);
-
-const actualModel = check.suggestedModel ?? 'claude-opus-4-1';
-const actualTools = check.disabledTools
-  ? check.tools.filter((t) => !check.disabledTools.includes(t))
-  : check.tools;
-
-// Use actualModel and actualTools for the LLM call...
+const result = await controller.check(request);
+if (!result.allowed) {
+  throw new BudgetExceededError({
+    scope: { scopeType: request.scopeType, scopeKey: request.scopeKey },
+    spent,
+    limit,
+    remaining: result.remaining,
+  });
+}
 ```
 
 ## Related Packages
