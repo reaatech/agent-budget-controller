@@ -24,7 +24,7 @@ export class PolicyEvaluator {
       return {
         action: EnforcementAction.HardStop,
         triggeredThresholds: [policy.hardCap],
-        disabledTools: policy.disableTools,
+        disabledTools: policy.disableTools ?? [],
         warning: `Hard cap reached (${(utilization * 100).toFixed(1)}% spent)`,
       };
     }
@@ -34,7 +34,7 @@ export class PolicyEvaluator {
       let suggestedModel: string | undefined;
 
       if (currentModel) {
-        for (const rule of policy.autoDowngrade) {
+        for (const rule of policy.autoDowngrade ?? []) {
           if (rule.from.includes('*') || rule.from.includes(currentModel)) {
             suggestedModel = rule.to;
             break;
@@ -42,7 +42,7 @@ export class PolicyEvaluator {
         }
       }
 
-      const disabledTools = policy.disableTools;
+      const disabledTools = policy.disableTools ?? [];
 
       if (suggestedModel) {
         return {

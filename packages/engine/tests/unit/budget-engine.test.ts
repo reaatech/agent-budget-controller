@@ -116,6 +116,30 @@ describe('BudgetController', () => {
     expect(result.reason).toBe('Hard cap exceeded');
   });
 
+  it('does not crash when policy omits autoDowngrade and disableTools', () => {
+    // Reproduction for issue #20: softCap reached, autoDowngrade omitted
+    controller.defineBudget({
+      scopeType: BudgetScope.Task,
+      scopeKey: 't',
+      limit: 1.0,
+      policy: { softCap: 0.8, hardCap: 1.0 },
+    });
+    controller.record({
+      requestId: 'r',
+      scopeType: BudgetScope.Task,
+      scopeKey: 't',
+      cost: 0.85,
+      inputTokens: 1,
+      outputTokens: 1,
+      modelId: 'x',
+      provider: 'y',
+      timestamp: new Date(),
+    });
+    const state = controller.getState(BudgetScope.Task, 't');
+    expect(state?.spent).toBe(0.85);
+    expect(state?.state).toBe(BudgetStateEnum.Warned);
+  });
+
   it('disables expensive tools at soft cap', () => {
     defineUserBudget(10, 0.5);
     controller.record(spendEntry(5.1));
@@ -426,9 +450,9 @@ describe('BudgetController', () => {
     const budget2 = controller.getBudget(BudgetScope.User, 'user-123');
     if (!budget1 || !budget2) throw new Error('Expected budgets to exist');
     budget1.policy.softCap = 0.1;
-    budget1.policy.autoDowngrade[0] = { from: ['x'], to: 'y' };
+    budget1.policy.autoDowngrade = [{ from: ['x'], to: 'y' }];
     expect(budget2.policy.softCap).toBe(0.8);
-    expect(budget2.policy.autoDowngrade[0].to).toBe('claude-sonnet-4');
+    expect(budget2.policy.autoDowngrade?.[0].to).toBe('claude-sonnet-4');
   });
 
   it('estimates cost from pricing provider when estimatedCost is zero', () => {
