@@ -97,7 +97,7 @@ export class BudgetController {
       ...resolved,
       policy: {
         ...resolved.policy,
-        autoDowngrade: resolved.policy.autoDowngrade.map((r) => ({ ...r })),
+        autoDowngrade: (resolved.policy.autoDowngrade ?? []).map((r) => ({ ...r })),
       },
     };
   }
@@ -229,7 +229,7 @@ export class BudgetController {
   ): string | undefined {
     const budget = this.resolveBudget(scopeType, scopeKey);
     if (!budget) return undefined;
-    return this.downgradeEngine.suggestDowngrade(currentModel, budget.policy.autoDowngrade);
+    return this.downgradeEngine.suggestDowngrade(currentModel, budget.policy.autoDowngrade ?? []);
   }
 
   getDisabledTools(scopeType: BudgetScope, scopeKey: string): string[] {

@@ -6,8 +6,8 @@ import { DowngradeRuleSchema } from './downgrade-rule.js';
 export interface BudgetPolicy {
   softCap: number;
   hardCap: number;
-  autoDowngrade: DowngradeRule[];
-  disableTools: string[];
+  autoDowngrade?: DowngradeRule[];
+  disableTools?: string[];
 }
 
 export const BudgetPolicySchema = z.object({
