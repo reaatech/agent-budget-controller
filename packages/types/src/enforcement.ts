@@ -10,7 +10,7 @@ export enum EnforcementAction {
   HardStop = 'hard-stop',
 }
 
-export const EnforcementActionSchema = z.nativeEnum(EnforcementAction);
+export const EnforcementActionSchema = z.enum(EnforcementAction);
 
 export enum BudgetStateEnum {
   Active = 'active',
@@ -19,7 +19,7 @@ export enum BudgetStateEnum {
   Stopped = 'stopped',
 }
 
-export const BudgetStateEnumSchema = z.nativeEnum(BudgetStateEnum);
+export const BudgetStateEnumSchema = z.enum(BudgetStateEnum);
 
 export interface StateTransition {
   scope: ScopeIdentifier;

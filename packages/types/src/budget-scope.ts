@@ -7,7 +7,7 @@ export enum BudgetScope {
   Org = 'org',
 }
 
-export const BudgetScopeSchema = z.nativeEnum(BudgetScope);
+export const BudgetScopeSchema = z.enum(BudgetScope);
 
 export interface ScopeIdentifier {
   scopeType: BudgetScope;

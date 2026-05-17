@@ -1,5 +1,4 @@
 import { BudgetController } from '@reaatech/agent-budget-engine';
-import { BudgetInterceptor } from '@reaatech/agent-budget-middleware';
 import { SpendStore } from '@reaatech/agent-budget-spend-tracker';
 import {
   BudgetExceededError,
@@ -8,6 +7,7 @@ import {
   type SpendEntry,
 } from '@reaatech/agent-budget-types';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { BudgetInterceptor } from '../../src/index.js';
 
 describe('Full Integration Flow', () => {
   let spendTracker: SpendStore;
