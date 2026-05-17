@@ -8,6 +8,13 @@ import { openaiPricing } from './tables/openai.js';
 export interface PriceEntry {
   inputPricePerMillion: number;
   outputPricePerMillion: number;
+  cacheReadPricePerMillion?: number;
+  cacheWritePricePerMillion?: number;
+}
+
+export interface ComputeCostOptions {
+  cacheReadTokens?: number;
+  cacheWriteTokens?: number;
 }
 
 export class PricingEngine {
@@ -75,11 +82,21 @@ export class PricingEngine {
     outputTokens: number,
     modelId: string,
     provider?: string,
+    options?: ComputeCostOptions,
   ): number {
     const price = this.lookup(modelId, provider);
-    const inputCost = (inputTokens * price.inputPricePerMillion) / 1_000_000;
+    const cacheReadTokens = options?.cacheReadTokens ?? 0;
+    const cacheWriteTokens = options?.cacheWriteTokens ?? 0;
+    const uncachedInputTokens = Math.max(0, inputTokens - cacheReadTokens - cacheWriteTokens);
+    const inputCost = (uncachedInputTokens * price.inputPricePerMillion) / 1_000_000;
     const outputCost = (outputTokens * price.outputPricePerMillion) / 1_000_000;
-    return inputCost + outputCost;
+    const cacheReadCost =
+      (cacheReadTokens * (price.cacheReadPricePerMillion ?? price.inputPricePerMillion)) /
+      1_000_000;
+    const cacheWriteCost =
+      (cacheWriteTokens * (price.cacheWritePricePerMillion ?? price.inputPricePerMillion)) /
+      1_000_000;
+    return inputCost + outputCost + cacheReadCost + cacheWriteCost;
   }
 
   estimateCost(
