@@ -24,7 +24,7 @@ export const SpendEntrySchema = z.object({
   modelId: z.string(),
   provider: z.string(),
   timestamp: z.date(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export interface SpendQuery {
