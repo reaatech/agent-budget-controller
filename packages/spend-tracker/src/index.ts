@@ -1,1 +1,1 @@
-export { SpendStore, type SpendAccumulator } from './spend-store.js';
+export { type SpendAccumulator, SpendStore } from './spend-store.js';
