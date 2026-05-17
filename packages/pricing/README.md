@@ -19,7 +19,7 @@ pnpm add @reaatech/agent-budget-pricing
 ## Feature Overview
 
 - **4 providers built in** — Anthropic (Claude), OpenAI (GPT/o-series), Google (Gemini), AWS Bedrock (multi-model)
-- **Token cost computation** — `computeCost(inputTokens, outputTokens, modelId)` returns exact dollar cost
+- **Token cost computation** — `computeCost(inputTokens, outputTokens, modelId)` returns exact dollar cost, with optional cache read/write token accounting
 - **Cost estimation** — `estimateCost(modelId, estimatedInputTokens)` for pre-flight budget checks
 - **Model name normalization** — `ModelNormalizer` maps provider aliases to canonical model IDs
 - **LRU cache with TTL** — configurable cache TTL (default 1 hour) avoids repeated table lookups
@@ -48,7 +48,7 @@ const estimate = pricing.estimateCost('claude-sonnet-4', 1000, 'anthropic');
 | Method                                                                 | Description                                                  |
 | ---------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `lookup(modelId, provider?)`                                           | Look up `PriceEntry` for a model. Returns `null` if unknown. |
-| `computeCost(inputTokens, outputTokens, modelId, provider?)`           | Calculate dollar cost for actual token usage                 |
+| `computeCost(inputTokens, outputTokens, modelId, provider?, options?)` | Calculate dollar cost for actual token usage                 |
 | `estimateCost(modelId, estimatedInputTokens, provider?, outputRatio?)` | Estimate cost before the call (default output ratio: 0.2)    |
 | `loadTable(provider, models)`                                          | Load or replace pricing data for a provider                  |
 | `clearCache()`                                                         | Invalidate the LRU cache                                     |
@@ -117,11 +117,19 @@ import { PricingEngine } from '@reaatech/agent-budget-pricing';
 
 const pricing = new PricingEngine();
 pricing.loadTable('my-provider', {
-  'my-model-v1': { inputPricePerMillion: 1.5, outputPricePerMillion: 5.0 },
+  'my-model-v1': {
+    inputPricePerMillion: 1.5,
+    outputPricePerMillion: 5.0,
+    cacheReadPricePerMillion: 0.15,
+    cacheWritePricePerMillion: 1.875,
+  },
   'my-model-v2': { inputPricePerMillion: 2.0, outputPricePerMillion: 8.0 },
 });
 
-const cost = pricing.computeCost(1000, 500, 'my-model-v1', 'my-provider');
+const cost = pricing.computeCost(1000, 500, 'my-model-v1', 'my-provider', {
+  cacheReadTokens: 250,
+  cacheWriteTokens: 100,
+});
 ```
 
 ### Integration with Budget Check

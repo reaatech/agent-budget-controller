@@ -92,6 +92,41 @@ describe('PricingEngine', () => {
     expect(cost).toBe(10.5);
   });
 
+  it('computes cache read and write tokens with separate rates', () => {
+    engine.loadTable('custom', {
+      'cached-model': {
+        inputPricePerMillion: 10,
+        outputPricePerMillion: 20,
+        cacheReadPricePerMillion: 1,
+        cacheWritePricePerMillion: 12.5,
+      },
+    });
+
+    const cost = engine.computeCost(1_000_000, 500_000, 'cached-model', 'custom', {
+      cacheReadTokens: 250_000,
+      cacheWriteTokens: 100_000,
+    });
+
+    // uncached input: 650k * $10/M = $6.5
+    // cache read: 250k * $1/M = $0.25
+    // cache write: 100k * $12.5/M = $1.25
+    // output: 500k * $20/M = $10
+    expect(cost).toBe(18);
+  });
+
+  it('defaults cache token pricing to input pricing for backward-compatible tables', () => {
+    engine.loadTable('custom', {
+      'legacy-model': { inputPricePerMillion: 10, outputPricePerMillion: 20 },
+    });
+
+    const cost = engine.computeCost(1_000_000, 500_000, 'legacy-model', 'custom', {
+      cacheReadTokens: 250_000,
+      cacheWriteTokens: 100_000,
+    });
+
+    expect(cost).toBe(20);
+  });
+
   it('estimates cost with default output ratio', () => {
     const cost = engine.estimateCost('claude-sonnet-4', 1_000_000, 'anthropic');
     // input: 1M * $3/M = $3, output: 0.5M * $15/M = $7.5
