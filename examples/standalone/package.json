@@ -1,6 +1,6 @@
 {
   "name": "agent-budget-controller-example-standalone",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Standalone usage example for agent-budget-controller",
   "license": "MIT",
