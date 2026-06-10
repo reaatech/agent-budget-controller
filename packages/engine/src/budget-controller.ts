@@ -60,13 +60,17 @@ export interface BudgetEventMap {
 
 const WILDCARD_KEY = '*';
 
+type EventListeners = {
+  [K in keyof BudgetEventMap]: Set<(event: BudgetEventMap[K]) => void>;
+};
+
 export class BudgetController {
   private budgets = new Map<string, BudgetDefinition>();
   private states = new Map<string, BudgetState>();
   private evaluator = new PolicyEvaluator();
   private downgradeEngine = new DowngradeEngine();
   private toolFilter = new ToolFilter();
-  private listeners = new Map<string, Set<(...args: unknown[]) => void>>();
+  private listeners: Partial<EventListeners> = {};
 
   constructor(private options: BudgetControllerOptions) {}
 
@@ -282,21 +286,21 @@ export class BudgetController {
   }
 
   on<K extends keyof BudgetEventMap>(event: K, callback: (event: BudgetEventMap[K]) => void): void {
-    if (!this.listeners.has(event)) {
-      this.listeners.set(event, new Set());
+    if (!this.listeners[event]) {
+      this.listeners[event] = new Set() as EventListeners[K];
     }
-    this.listeners.get(event)?.add(callback as unknown as (...args: unknown[]) => void);
+    this.listeners[event]?.add(callback);
   }
 
   off<K extends keyof BudgetEventMap>(
     event: K,
     callback: (event: BudgetEventMap[K]) => void,
   ): void {
-    this.listeners.get(event)?.delete(callback as unknown as (...args: unknown[]) => void);
+    this.listeners[event]?.delete(callback);
   }
 
   private emit<K extends keyof BudgetEventMap>(event: K, data: BudgetEventMap[K]): void {
-    const callbacks = this.listeners.get(event);
+    const callbacks = this.listeners[event];
     if (!callbacks) return;
     for (const cb of callbacks) {
       try {
