@@ -43,7 +43,7 @@
   "devDependencies": {
     "@reaatech/agent-budget-spend-tracker": "workspace:*",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.3",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.0"
   }
 }
